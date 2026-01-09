@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur TSS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-top: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Calculateur TSS</h1>
+
+        <p>
+            Ceci est un calculateur de TSS (Thalassemia Severity Score).
+            <br>
+            Basé sur l'article suivant: <a
+                href="https://haematologica.org/article/view/7336">doi:10.3324/haematol.2014.113886</a>
+        </p>
+
+        <div class="form-group">
+            <label for="sample_sex">Sexe de l'échantillon</label>
+            <select id="sample_sex">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">Femme</option>
+                <option value="0.825">Homme</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_hbb_defects">Mutations HBB</label>
+            <select id="sample_hbb_defect">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">severe/severe</option>
+                <option value="0.373">mild/severe</option>
+                <option value="0.032">mild/mild</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_hba_defects">Mutations HBA</label>
+            <select id="sample_hba_defects">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">Aucune mutation</option>
+                <option value="0.646">Une mutation</option>
+                <option value="0.252">Deux mutations</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_rs7482144">Mutation HBG2 (rs7482144)</label>
+            <select id="sample_rs7482144">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">C/C</option>
+                <option value="0.221">C/T</option>
+                <option value="0.052">T/T</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_rs9399137">Mutation HBSIL-MYB (rs9399137)</label>
+            <select id="sample_rs9399137">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">T/T</option>
+                <option value="0.598">C/T</option>
+                <option value="0.158">C/C</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_rs1427407">BCL11A (rs1427407)</label>
+            <select id="sample_rs1427407">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">G/G</option>
+                <option value="0.702">G/T</option>
+                <option value="0.362">T/T</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sample_rs10189857">BCL11A (rs10189857)</label>
+            <select id="sample_rs10189857">
+                <option value="">Sélectionnez une valeur</option>
+                <option value="1.0">A/A</option>
+                <option value="0.987">A/G</option>
+                <option value="0.689">G/G</option>
+            </select>
+        </div>
+
+        <button class="calculate-btn" onclick="calculate()">Calculer</button>
+
+        <div id="resultat" class="result">
+            Cliquez sur "Calculer" pour voir le résultat
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Récupérer les valeurs de tous les comboboxes
+            const sample_sex = parseFloat(document.getElementById('sample_sex').value);
+            const sample_hbb_defect = parseFloat(document.getElementById('sample_hbb_defect').value);
+            const sample_hba_defects = parseFloat(document.getElementById('sample_hba_defects').value);
+            const sample_rs7482144 = parseFloat(document.getElementById('sample_rs7482144').value);
+            const sample_rs9399137 = parseFloat(document.getElementById('sample_rs9399137').value);
+            const sample_rs1427407 = parseFloat(document.getElementById('sample_rs1427407').value);
+            const sample_rs10189857 = parseFloat(document.getElementById('sample_rs10189857').value);
+
+            let has_missing = [sample_sex,
+                sample_hbb_defect,
+                sample_hba_defects,
+                sample_rs7482144,
+                sample_rs9399137,
+                sample_rs1427407,
+                sample_rs10189857
+            ].some((i) => isNaN(i));
+
+            if (has_missing) {
+                alert("Vous devez définir tous les génotypes !")
+                return;
+            }
+            // Calcul simple - vous pouvez modifier cette formule selon vos besoins
+            const LPS = Math.log(sample_sex) + Math.log(sample_hbb_defect) + Math.log(sample_hba_defects) + Math.log(sample_rs7482144) + Math.log(sample_rs9399137) + Math.log(sample_rs1427407) + Math.log(sample_rs10189857);
+
+            const TSS = Math.pow(9.5 + LPS, 6) / 80000;
+
+            // Afficher le résultat dans la div "résultat"
+            const resultatDiv = document.getElementById('resultat');
+
+            resultatDiv.innerHTML = `TSS (Thalassemia Severity Score): ${TSS.toFixed(4)}`;
+
+        }
+    </script>
+</body>
+
+</html>
